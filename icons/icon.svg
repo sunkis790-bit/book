@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="자산·카드 장부">
+  <title>자산·카드 장부</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d8d60"/>
+      <stop offset="1" stop-color="#25633f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <rect x="106" y="86" width="300" height="340" rx="33" fill="#f7f9f4"/>
+  <line x1="160" y1="117" x2="160" y2="395" stroke="#b7d3bb" stroke-width="7" stroke-linecap="round"/>
+  <rect x="193" y="149" width="171" height="29" rx="14" fill="#2f7a4f"/>
+  <rect x="193" y="242" width="138" height="29" rx="14" fill="#2f7a4f"/>
+  <rect x="193" y="334" width="156" height="29" rx="14" fill="#2f7a4f"/>
+</svg>

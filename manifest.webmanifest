@@ -1,0 +1,38 @@
+{
+  "name": "자산·카드 장부",
+  "short_name": "장부",
+  "description": "Google 드라이브의 book.xlsx를 브라우저에서 바로 읽고 고쳐 저장하는 자산·카드 장부",
+  "lang": "ko",
+  "dir": "ltr",
+  "start_url": "/book/",
+  "scope": "/book/",
+  "display": "standalone",
+  "background_color": "#f4f6f2",
+  "theme_color": "#2f7a4f",
+  "icons": [
+    {
+      "src": "/book/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/book/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/book/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/book/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="자산·카드 장부 — 비밀번호로 잠긴 페이지">
+<title>자산·카드 장부</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg?v=8" type="image/svg+xml">
+<link rel="icon" href="icons/icon-192.png?v=8" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/icon-192.png?v=8">
+<meta name="theme-color" content="#2f7a4f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="장부">
+<style id="lock-style">
+  :root {
+    --bg: #f4f6f2;
+    --card: #ffffff;
+    --ink: #1c201b;
+    --ink-soft: #4a5147;
+    --muted: #737b70;
+    --line: #e3e6df;
+    --accent: #2f7a4f;
+    --accent-dark: #25633f;
+    --accent-soft: #e9f3ea;
+    --danger: #b3261e;
+    --danger-soft: #fdecea;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(24, 38, 24, .05), 0 8px 24px rgba(24, 38, 24, .05);
+    --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic",
+      "Noto Sans KR", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 18px calc(24px + env(safe-area-inset-bottom));
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .lock { width: 100%; max-width: 400px; }
+  .lock-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 30px 22px 22px;
+    text-align: center;
+  }
+  .lock-mark {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 14px;
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    line-height: 1;
+    background: var(--accent-soft);
+    border-radius: 17px;
+  }
+  .lock-title {
+    margin: 0 0 6px;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+  }
+  .lock-lead {
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  .field { display: block; text-align: left; }
+  .field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .pw-row { display: flex; gap: 8px; }
+  .pw-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 48px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: 16px;
+    letter-spacing: .12em;
+    color: var(--ink);
+    background: #fbfcf9;
+    border: 1px solid #cfd5c9;
+    border-radius: 12px;
+    outline: none;
+  }
+  .pw-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(47, 122, 79, .18);
+    background: #fff;
+  }
+  .pw-input::placeholder { letter-spacing: 0; color: #9aa296; font-size: 15px; }
+  .pw-toggle {
+    flex: 0 0 auto;
+    height: 48px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-dark);
+    background: var(--accent-soft);
+    border: 1px solid #cfe3d3;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  .pw-toggle[aria-pressed="true"] {
+    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .lock-error {
+    margin: 12px 0 0;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.45;
+    text-align: left;
+    color: var(--danger);
+    background: var(--danger-soft);
+    border: 1px solid #f3c9c4;
+    border-radius: 10px;
+  }
+  .btn-unlock {
+    width: 100%;
+    height: 50px;
+    margin-top: 16px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .15s ease;
+  }
+  .btn-unlock:hover:not(:disabled) { background: var(--accent-dark); }
+  .btn-unlock:disabled { opacity: .65; cursor: default; }
+  .lock-note {
+    margin: 18px 0 0;
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<main class="lock">
+  <div class="lock-card">
+    <div class="lock-mark" aria-hidden="true">📒</div>
+    <h1 class="lock-title">자산·카드 장부</h1>
+    <p class="lock-lead">비밀번호를 입력하면 장부가 열립니다.</p>
+
+    <form id="lock-form" novalidate autocomplete="off">
+      <label class="field">
+        <span class="field-label">비밀번호</span>
+        <div class="pw-row">
+          <input id="pw" class="pw-input" type="password" name="pw"
+                 inputmode="text" autocomplete="current-password" autocapitalize="off"
+                 autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="비밀번호">
+          <button id="pw-toggle" class="pw-toggle" type="button" aria-pressed="false" aria-label="비밀번호 보기">보기</button>
+        </div>
+      </label>
+
+      <p id="lock-error" class="lock-error" role="alert" hidden></p>
+
+      <button id="btn-unlock" class="btn-unlock" type="submit">잠금 해제</button>
+    </form>
+
+    <p class="lock-note">화면과 코드는 암호화되어 저장되어 있습니다.<br>비밀번호는 이 브라우저에 저장하지 않습니다.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var form = document.getElementById('lock-form');
+  var input = document.getElementById('pw');
+  var toggle = document.getElementById('pw-toggle');
+  var button = document.getElementById('btn-unlock');
+  var errorBox = document.getElementById('lock-error');
+  var busy = false;
+  var envelopePromise = null;
+
+  var MSG = {
+    wrong: '비밀번호가 맞지 않아요. 다시 입력해 주세요.',
+    network: '잠금 파일을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.',
+    broken: '앱을 여는 중 문제가 생겼어요. 새로고침 후 다시 시도해 주세요.',
+    unsupported: '이 브라우저에서는 잠금을 해제할 수 없어요. https 주소로 열어 주세요.'
+  };
+
+  function showError(message) {
+    if (!message) { errorBox.hidden = true; errorBox.textContent = ''; return; }
+    errorBox.textContent = message;
+    errorBox.hidden = false;
+  }
+
+  function setBusy(value) {
+    busy = value;
+    button.disabled = value;
+    input.disabled = value;
+    button.textContent = value ? '여는 중…' : '잠금 해제';
+  }
+
+  function b64ToBytes(b64) {
+    var binary = atob(b64);
+    var bytes = new Uint8Array(binary.length);
+    for (var i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  function loadEnvelope() {
+    if (!envelopePromise) {
+      envelopePromise = fetch('app.enc.json', { cache: 'no-store' }).then(function (res) {
+        if (!res.ok) throw new Error('payload ' + res.status);
+        return res.json();
+      });
+      envelopePromise.catch(function () { envelopePromise = null; });
+    }
+    return envelopePromise;
+  }
+
+  function decrypt(envelope, password) {
+    var encoder = new TextEncoder();
+    return crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveKey'])
+      .then(function (baseKey) {
+        return crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: b64ToBytes(envelope.salt),
+            iterations: envelope.iter,
+            hash: 'SHA-256'
+          },
+          baseKey,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['decrypt']
+        );
+      })
+      .then(function (key) {
+        return crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: b64ToBytes(envelope.iv), tagLength: 128 },
+          key,
+          b64ToBytes(envelope.data)
+        );
+      })
+      .then(function (buffer) {
+        return JSON.parse(new TextDecoder().decode(buffer));
+      });
+  }
+
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var script = document.createElement('script');
+      script.src = src;
+      script.async = false;
+      script.onload = function () { resolve(); };
+      script.onerror = function () { reject(new Error('script ' + src)); };
+      document.head.appendChild(script);
+    });
+  }
+
+  function openApp(payload) {
+    return loadScript('vendor/xlsx.full.min.js').then(function () {
+      var appStyle = document.createElement('style');
+      appStyle.id = 'app-style';
+      appStyle.textContent = payload.css;
+      document.head.appendChild(appStyle);
+
+      var lockStyle = document.getElementById('lock-style');
+      if (lockStyle) lockStyle.parentNode.removeChild(lockStyle);
+
+      document.title = payload.title || 'book · 가계부';
+      document.body.innerHTML = payload.html;
+      document.body.removeAttribute('style');
+
+      for (var i = 0; i < payload.scripts.length; i += 1) {
+        var inline = document.createElement('script');
+        inline.textContent = payload.scripts[i].code;
+        document.body.appendChild(inline);
+      }
+    });
+  }
+
+  if (!window.crypto || !window.crypto.subtle || !window.TextEncoder) {
+    showError(MSG.unsupported);
+    button.disabled = true;
+    return;
+  }
+
+  toggle.addEventListener('click', function () {
+    var showing = input.getAttribute('type') === 'text';
+    input.setAttribute('type', showing ? 'password' : 'text');
+    toggle.setAttribute('aria-pressed', showing ? 'false' : 'true');
+    toggle.setAttribute('aria-label', showing ? '비밀번호 보기' : '비밀번호 가리기');
+    toggle.textContent = showing ? '보기' : '가리기';
+    input.focus();
+  });
+
+  input.addEventListener('input', function () { showError(''); });
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    if (busy) return;
+    var password = input.value;
+    if (!password) {
+      showError('비밀번호를 입력해 주세요.');
+      input.focus();
+      return;
+    }
+    showError('');
+    setBusy(true);
+
+    loadEnvelope()
+      .then(function (envelope) {
+        return decrypt(envelope, password).then(null, function (error) {
+          // 복호화 실패(AES-GCM 인증 실패)는 곧 비밀번호 불일치
+          if (error && (error.name === 'OperationError' || error.name === 'DataError')) {
+            var wrong = new Error('wrong');
+            wrong.wrongPassword = true;
+            throw wrong;
+          }
+          throw error;
+        });
+      })
+      .then(function (payload) { return openApp(payload); })
+      .then(function () {
+        setBusy(false);
+        input.value = '';
+      })
+      .catch(function (error) {
+        setBusy(false);
+        if (error && error.wrongPassword) {
+          showError(MSG.wrong);
+          input.value = '';
+          input.focus();
+          return;
+        }
+        var message = String((error && error.message) || '');
+        var network = (error instanceof TypeError) || /^payload/.test(message);
+        showError(network ? MSG.network : MSG.broken);
+      });
+  });
+
+  // 홈 화면 아이콘(PWA)용 서비스 워커: 잠금 화면과 암호화 파일만 캐시합니다.
+  if ('serviceWorker' in navigator &&
+      (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () { /* 미지원·비보안 컨텍스트는 무시 */ });
+    });
+  }
+})();
+</script>
+</body>
+</html>
